@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Table Tennis">
+
+
+<title>Table Tennis Score</title>
+
+<link rel="stylesheet" href="style.css">
+
+
+</head>
+
+<body>
+
+<div class="app">
+
+
+<h1>🏓 TABLE TENNIS</h1>
+
+
+<div class="settings">
+
+    <label>
+        Match
+        <select id="bestOf">
+            <option value="1">Best of 1</option>
+            <option value="3" selected>Best of 3</option>
+            <option value="5">Best of 5</option>
+            <option value="7">Best of 7</option>
+        </select>
+    </label>
+
+
+    <button id="startingServer" class="server-button">
+        🏓 Player 1 Serves First
+    </button>
+
+</div>
+
+
+<div class="players">
+
+    <div class="player-card">
+
+        <select id="player1Name" class="player-name">
+            <option value="Player 1">Player 1</option>
+        </select>
+
+        <div id="score1" class="score">0</div>
+
+        <div class="serve">
+
+            <div id="bulb1" class="bulb"></div>
+
+            <span id="serve1">
+                SERVING
+            </span>
+
+        </div>
+
+        <button id="point1" class="point-button">
+            + POINT
+        </button>
+
+    </div>
+
+
+    <div class="player-card">
+
+        <select id="player2Name" class="player-name">
+            <option value="Player 2">Player 2</option>
+        </select>
+
+        <div id="score2" class="score">0</div>
+
+        <div class="serve">
+
+            <div id="bulb2" class="bulb"></div>
+
+            <span id="serve2">
+                NOT SERVING
+            </span>
+
+        </div>
+
+        <button id="point2" class="point-button">
+            + POINT
+        </button>
+
+    </div>
+
+</div>
+
+
+<div class="player-management">
+
+    <input
+        id="newPlayerName"
+        type="text"
+        placeholder="Enter new player name"
+        maxlength="20"
+    >
+
+    <button id="addPlayer">
+        + Add Player
+    </button>
+
+    <button id="deletePlayer">
+        🗑 Delete Selected Player
+    </button>
+
+</div>
+
+
+<div class="match">
+
+    <div class="set-number">
+        SET <span id="setNumber">1</span>
+    </div>
+
+    <div class="sets">
+        <span id="sets1">0</span>
+        <span>-</span>
+        <span id="sets2">0</span>
+    </div>
+
+    <div id="message"></div>
+
+</div>
+
+
+<div class="controls">
+
+    <button id="undo">
+        ↶ Undo
+    </button>
+
+    <button id="swap">
+        ⇄ Swap Sides
+    </button>
+
+    <button id="newMatch">
+        🆕 New Match
+    </button>
+
+</div>
+
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>

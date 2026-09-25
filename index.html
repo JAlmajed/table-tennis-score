@@ -23,23 +23,19 @@
 
 <h1>🏓 TABLE TENNIS</h1>
 
-
 <div class="settings">
 
     <label>
-        Match
         <select id="bestOf">
-            <option value="1">Best of 1</option>
-            <option value="3" selected>Best of 3</option>
+            <option value="1" selected>Best of 1</option>
+            <option value="3">Best of 3</option>
             <option value="5">Best of 5</option>
             <option value="7">Best of 7</option>
         </select>
     </label>
 
 
-    <button id="startingServer" class="server-button">
-        🏓 Player 1 Serves First
-    </button>
+
 
 </div>
 
@@ -95,28 +91,26 @@
 
     </div>
 
-</div>
+</div></div>
 
+<div class="controls">
 
-<div class="player-management">
-
-    <input
-        id="newPlayerName"
-        type="text"
-        placeholder="Enter new player name"
-        maxlength="20"
-    >
-
-    <button id="addPlayer">
-        + Add Player
+    <button id="undo">
+        ↶ Undo
     </button>
 
-    <button id="deletePlayer">
-        🗑 Delete Selected Player
+    <button id="swap">
+        ⇄ Swap Sides
     </button>
 
+    <button id="newMatch">
+        🆕 New Match
+    </button>
+    
+    <button id="startingServer" class="server-button">
+        🏓 Player 1 Serves First
+    </button>
 </div>
-
 
 <div class="match">
 
@@ -135,22 +129,11 @@
 </div>
 
 
-<div class="controls">
-
-    <button id="undo">
-        ↶ Undo
-    </button>
-
-    <button id="swap">
-        ⇄ Swap Sides
-    </button>
-
-    <button id="newMatch">
-        🆕 New Match
-    </button>
-
+<div class="">
+  <input id="newPlayerName" type="text" placeholder="New Player Name">
+  <button id="addPlayer">+ Add Player</button>
+  <button id="deletePlayer">🗑 Delete Player</button>
 </div>
-
 
 </div>
 

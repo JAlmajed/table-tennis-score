@@ -61,8 +61,7 @@ min-height: 43px;
 
 .players {
 display: flex;
-gap: 15px;
-width: 100%;
+gap: 20px;
 }
 
 .player-card {
@@ -137,30 +136,32 @@ touch-action: manipulation;
 transform: scale(0.97);
 }
 
+@media (max-width: 600px) {
 .player-management {
-display: flex;
-justify-content: center;
-gap: 10px;
-margin: 20px 0;
-flex-wrap: wrap;
+display: flex !important;
+flex-direction: row !important;
+flex-wrap: nowrap !important;
+justify-content: center !important;
+align-items: center !important;
+gap: 5px !important;
+width: 100% !important;
+margin: 8px auto !important;
 }
 
-.player-management input {
-padding: 12px;
-border-radius: 8px;
-border: none;
-font-size: 16px;
-min-width: 220px;
+.player-management #newPlayerName,
+.player-management #addPlayer,
+.player-management #deletePlayer {
+width: 105px !important;
+min-width: 105px !important;
+max-width: 105px !important;
+height: 30px !important;
+padding: 4px !important;
+font-size: 11px !important;
+box-sizing: border-box !important;
+flex: 0 0 105px !important;
+}
 }
 
-.player-management button {
-padding: 12px 16px;
-border: none;
-border-radius: 8px;
-font-size: 15px;
-font-weight: bold;
-cursor: pointer;
-}
 
 #addPlayer {
 background: #168a45;
@@ -179,12 +180,15 @@ margin: 25px 0;
 .set-number {
 font-size: 18px;
 font-weight: bold;
+text-align: center;
+
 }
 
 .sets {
 font-size: 42px;
 font-weight: bold;
 margin-top: 5px;
+text-align: center;
 }
 
 #message {
@@ -192,6 +196,7 @@ min-height: 28px;
 margin-top: 10px;
 font-size: 18px;
 font-weight: bold;
+text-align: center;
 }
 
 .controls {
@@ -310,5 +315,6 @@ h1 {
 .player-management {
     margin: 8px 0;
 }
+
 
 }

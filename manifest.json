@@ -1,0 +1,9 @@
+{
+"name": "Table Tennis Score",
+"short_name": "TT Score",
+"start_url": "./",
+"display": "standalone",
+"background_color": "#111111",
+"theme_color": "#111111",
+"orientation": "portrait"
+}

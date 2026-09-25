@@ -136,31 +136,57 @@ touch-action: manipulation;
 transform: scale(0.97);
 }
 
-@media (max-width: 600px) {
 .player-management {
-display: flex !important;
-flex-direction: row !important;
-flex-wrap: nowrap !important;
-justify-content: center !important;
-align-items: center !important;
-gap: 5px !important;
-width: 100% !important;
-margin: 8px auto !important;
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+gap: 8px;
+width: 100%;
+margin: 12px auto;
 }
 
 .player-management #newPlayerName,
 .player-management #addPlayer,
 .player-management #deletePlayer {
-width: 105px !important;
-min-width: 105px !important;
-max-width: 105px !important;
-height: 30px !important;
-padding: 4px !important;
-font-size: 11px !important;
-box-sizing: border-box !important;
-flex: 0 0 105px !important;
+width: 110px;
+height: 34px;
+box-sizing: border-box;
+border-radius: 10px;
+font-size: 12px;
+font-weight: 600;
+padding: 5px 8px;
+}
+
+.player-management #newPlayerName {
+text-align: center;
+}
+
+.player-management #addPlayer,
+.player-management #deletePlayer {
+display: flex;
+align-items: center;
+justify-content: center;
+white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+.player-management {
+gap: 6px;
+margin: 10px auto;
+}
+
+.player-management #newPlayerName,
+.player-management #addPlayer,
+.player-management #deletePlayer {
+width: 95px;
+height: 30px;
+font-size: 10px;
+border-radius: 9px;
+padding: 4px;
 }
 }
+
 
 
 #addPlayer {

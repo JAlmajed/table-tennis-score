@@ -72,59 +72,75 @@ function savePlayers(players) {
 
 
 function updateStartingServerButton() {
-
-    if (startingServerPlayer === 1) {
-
+    if (!player1Name.value || !player2Name.value) {
         startingServerButton.textContent =
-            "🏓 " +
-            player1Name.value +
-            " Serves First";
-
-    } else {
-
-        startingServerButton.textContent =
-            "🏓 " +
-            player2Name.value +
-            " Serves First";
-
+            "🏓 Select Both Players First";
+        return;
     }
+
+    const startingPlayer = startingServerPlayer === 1
+        ? player1Name.value
+        : player2Name.value;
+
+    startingServerButton.textContent =
+        "🏓 " + startingPlayer + " Serves First";
+}
 
 }
 
 
-function updatePlayerDropdowns() {
-
+function updatePlayerDropdowns(resetSelection = false) {
     const players = getPlayers();
 
-    const currentPlayer1 = player1Name.value;
-    const currentPlayer2 = player2Name.value;
+    const currentPlayer1 = resetSelection
+        ? ""
+        : player1Name.value;
 
+    const currentPlayer2 = resetSelection
+        ? ""
+        : player2Name.value;
 
     player1Name.innerHTML = "";
     player2Name.innerHTML = "";
 
+    // Add a placeholder to both dropdowns.
+    const placeholder1 = document.createElement("option");
+    placeholder1.value = "";
+    placeholder1.textContent = "Select Player";
+    player1Name.appendChild(placeholder1);
 
-    if (players.length === 0) {
+    const placeholder2 = document.createElement("option");
+    placeholder2.value = "";
+    placeholder2.textContent = "Select Player";
+    player2Name.appendChild(placeholder2);
 
-        const option1 =
-            document.createElement("option");
-
-        option1.value = "Player 1";
-        option1.textContent = "Player 1";
-
-        const option2 =
-            document.createElement("option");
-
-        option2.value = "Player 2";
-        option2.textContent = "Player 2";
-
+    // Add saved players to both dropdowns.
+    players.forEach(function (name) {
+        const option1 = document.createElement("option");
+        option1.value = name;
+        option1.textContent = name;
         player1Name.appendChild(option1);
+
+        const option2 = document.createElement("option");
+        option2.value = name;
+        option2.textContent = name;
         player2Name.appendChild(option2);
+    });
 
-        updateStartingServerButton();
+    // Restore selections only when requested and still valid.
+    player1Name.value = players.includes(currentPlayer1)
+        ? currentPlayer1
+        : "";
 
-        return;
-    }
+    player2Name.value =
+        players.includes(currentPlayer2) &&
+        currentPlayer2 !== player1Name.value
+            ? currentPlayer2
+            : "";
+
+    preventSamePlayer();
+    updateStartingServerButton();
+}
 
 
     players.forEach(function (name) {
@@ -504,6 +520,10 @@ document.getElementById("point2")
 
 function addPoint(player) {
 
+    if (!player1Name.value || !player2Name.value) {
+    alert("Select both players before starting the match.");
+    return;
+}
     if (matchFinished) {
         return;
     }
@@ -852,41 +872,34 @@ document.getElementById("swap")
 
 
 document.getElementById("newMatch")
-    .addEventListener(
-        "click",
-        function () {
+    .addEventListener("click", function () {
+        score1 = 0;
+        score2 = 0;
 
-            score1 = 0;
-            score2 = 0;
+        sets1 = 0;
+        sets2 = 0;
 
-            sets1 = 0;
-            sets2 = 0;
+        setNumber = 1;
+        startingServerPlayer = 1;
+        server = 1;
 
-            setNumber = 1;
+        pointHistory = [];
+        matchFinished = false;
 
-            server =
-                startingServerPlayer;
+        message.textContent = "";
 
-            pointHistory = [];
+        // Clear both selections and show the placeholders.
+        updatePlayerDropdowns(true);
 
-            matchFinished = false;
-
-            message.textContent = "";
-
-
-            updateStartingServerButton();
-
-            updateScreen();
-
-        }
-    );
+        updateStartingServerButton();
+        updateScreen();
+    });
 
 
-updatePlayerDropdowns();
+updatePlayerDropdowns(true);
 
 updateStartingServerButton();
 
 updateScreen();
-
 
 });

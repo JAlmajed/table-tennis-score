@@ -108,7 +108,7 @@ function updatePlayerDropdowns(resetSelection = false) {
 
     const placeholder2 = document.createElement("option");
     placeholder2.value = "";
-    placeholder2.textContent = "Player 2🏓";
+    placeholder2.textContent = "Player 2";
     player2Name.appendChild(placeholder2);
 
     players.forEach(function (name) {
@@ -158,70 +158,29 @@ function preventSamePlayer() {
 }
 
 
-player1Name.addEventListener(
-    "change",
-    function () {
-
-        if (
-            player1Name.value ===
-            player2Name.value
-        ) {
-
-            const differentPlayer =
-                getPlayers().find(function (name) {
-                    return name !== player1Name.value;
-                });
-
-
-            if (differentPlayer) {
-
-                player2Name.value =
-                    differentPlayer;
-
-            }
-
-        }
-
-
-        preventSamePlayer();
-
-        updateStartingServerButton();
-
+player1Name.addEventListener("change", function () {
+    if (
+        player1Name.value !== "" &&
+        player1Name.value === player2Name.value
+    ) {
+        player2Name.value = "";
     }
-);
 
+    preventSamePlayer();
+    updateStartingServerButton();
+});
 
-player2Name.addEventListener(
-    "change",
-    function () {
-
-        if (
-            player2Name.value ===
-            player1Name.value
-        ) {
-
-            const differentPlayer =
-                getPlayers().find(function (name) {
-                    return name !== player2Name.value;
-                });
-
-
-            if (differentPlayer) {
-
-                player1Name.value =
-                    differentPlayer;
-
-            }
-
-        }
-
-
-        preventSamePlayer();
-
-        updateStartingServerButton();
-
+player2Name.addEventListener("change", function () {
+    if (
+        player2Name.value !== "" &&
+        player2Name.value === player1Name.value
+    ) {
+        player2Name.value = "";
     }
-);
+
+    preventSamePlayer();
+    updateStartingServerButton();
+});
 
 
 startingServerButton.addEventListener(

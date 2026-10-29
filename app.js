@@ -70,10 +70,24 @@ document.addEventListener("DOMContentLoaded", function () {
         player2Name.add(new Option("Player 2", ""));
 
         // Add all saved names to both dropdowns.
-        players.forEach(function (name) {
-            player1Name.add(new Option(name, name));
-            player2Name.add(new Option(name, name));
-        });
+        
+    // Add saved players to both dropdowns.
+    players.forEach(function (name) {
+        player1Name.add(new Option(name, name));
+        player2Name.add(new Option(name, name));
+    });
+
+    // Add placeholders at the top, not as selectable saved players.
+    player1Name.insertBefore(
+        new Option("Player 1", ""),
+        player1Name.firstChild
+    );
+
+    player2Name.insertBefore(
+        new Option("Player 2", ""),
+        player2Name.firstChild
+    );
+
 
         if (resetSelection) {
             // Reset both dropdowns to their placeholders.

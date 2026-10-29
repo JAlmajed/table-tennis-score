@@ -103,12 +103,12 @@ function updatePlayerDropdowns(resetSelection = false) {
 
     const placeholder1 = document.createElement("option");
     placeholder1.value = "";
-    placeholder1.textContent = "Select Player";
+    placeholder1.textContent = "Player 1";
     player1Name.appendChild(placeholder1);
 
     const placeholder2 = document.createElement("option");
     placeholder2.value = "";
-    placeholder2.textContent = "Select Player";
+    placeholder2.textContent = "Player 2🏓";
     player2Name.appendChild(placeholder2);
 
     players.forEach(function (name) {

@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function () {
     let score1 = 0;
     let score2 = 0;
@@ -31,13 +30,19 @@ document.addEventListener("DOMContentLoaded", function () {
     function getPlayers() {
         return JSON.parse(
             localStorage.getItem("tableTennisPlayers") || "[]"
-        );
+        ).filter(function (name) {
+            return name !== "Player 1" && name !== "Player 2";
+        });
     }
 
     function savePlayers(players) {
         localStorage.setItem(
             "tableTennisPlayers",
-            JSON.stringify(players)
+            JSON.stringify(
+                players.filter(function (name) {
+                    return name !== "Player 1" && name !== "Player 2";
+                })
+            )
         );
     }
 
@@ -65,36 +70,27 @@ document.addEventListener("DOMContentLoaded", function () {
         player1Name.innerHTML = "";
         player2Name.innerHTML = "";
 
-        // Always create the placeholder options first.
-        player1Name.add(new Option("Player 1", ""));
-        player2Name.add(new Option("Player 2", ""));
+        // Add saved players only; placeholders are added separately.
+        players.forEach(function (name) {
+            player1Name.add(new Option(name, name));
+            player2Name.add(new Option(name, name));
+        });
 
-        // Add all saved names to both dropdowns.
-        
-    // Add saved players to both dropdowns.
-    players.forEach(function (name) {
-        player1Name.add(new Option(name, name));
-        player2Name.add(new Option(name, name));
-    });
+        // Put the placeholder labels at the top of each dropdown.
+        player1Name.insertBefore(
+            new Option("Player 1", ""),
+            player1Name.firstChild
+        );
 
-    // Add placeholders at the top, not as selectable saved players.
-    player1Name.insertBefore(
-        new Option("Player 1", ""),
-        player1Name.firstChild
-    );
-
-    player2Name.insertBefore(
-        new Option("Player 2", ""),
-        player2Name.firstChild
-    );
-
+        player2Name.insertBefore(
+            new Option("Player 2", ""),
+            player2Name.firstChild
+        );
 
         if (resetSelection) {
-            // Reset both dropdowns to their placeholders.
             player1Name.selectedIndex = 0;
             player2Name.selectedIndex = 0;
         } else {
-            // Preserve valid existing selections.
             player1Name.value = players.includes(currentPlayer1)
                 ? currentPlayer1
                 : "";
@@ -152,6 +148,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     startingServerButton.addEventListener("click", function () {
+        if (!player1Name.value || !player2Name.value) {
+            updateStartingServerButton();
+            return;
+        }
+
         startingServerPlayer = startingServerPlayer === 1 ? 2 : 1;
         server = startingServerPlayer;
 
@@ -167,6 +168,11 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+        if (name === "Player 1" || name === "Player 2") {
+            alert("This name is reserved for the dropdown placeholder.");
+            return;
+        }
+
         const players = getPlayers();
 
         if (players.includes(name)) {
@@ -179,7 +185,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         updatePlayerDropdowns();
 
-        // Keep the existing behavior of selecting the newly added player.
         player1Name.value = name;
 
         const differentPlayer = players.find(function (player) {
@@ -212,9 +217,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const confirmed = confirm('Delete "' + playerToDelete + '"?');
-
-        if (!confirmed) {
+        if (!confirm('Delete "' + playerToDelete + '"?')) {
             return;
         }
 
@@ -224,14 +227,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         savePlayers(updatedPlayers);
         updatePlayerDropdowns();
-
-        if (player1Name.value === playerToDelete) {
-            player1Name.value = "";
-        }
-
-        if (player2Name.value === playerToDelete) {
-            player2Name.value = "";
-        }
 
         preventSamePlayer();
         updateStartingServerButton();
@@ -437,7 +432,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateScreen();
     });
 
-    // Initial app state: show Player 1 and Player 2 placeholders.
+    // Initial state: show placeholders, not saved player selections.
     updatePlayerDropdowns(true);
     updateStartingServerButton();
     updateScreen();

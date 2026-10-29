@@ -303,5 +303,9 @@ h1 {
     margin: 8px 0;
 }
 
+.player-name option[value=""] {
+    display: none;
+}
+
 
 }

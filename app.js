@@ -87,55 +87,46 @@ function updateStartingServerButton() {
         "🏓 " + startingPlayer + " Serves First";
 }
 
+
 function updatePlayerDropdowns(resetSelection = false) {
     const players = getPlayers();
 
-    const currentPlayer1 = resetSelection
-        ? ""
-        : player1Name.value;
-
-    const currentPlayer2 = resetSelection
-        ? ""
-        : player2Name.value;
+    const currentPlayer1 = resetSelection ? "" : player1Name.value;
+    const currentPlayer2 = resetSelection ? "" : player2Name.value;
 
     player1Name.innerHTML = "";
     player2Name.innerHTML = "";
 
-    const placeholder1 = document.createElement("option");
-    placeholder1.value = "";
-    placeholder1.textContent = "Player 1";
-    player1Name.appendChild(placeholder1);
+    // Show placeholders by default
+    player1Name.add(new Option("Player 1", ""));
+    player2Name.add(new Option("Player 2", ""));
 
-    const placeholder2 = document.createElement("option");
-    placeholder2.value = "";
-    placeholder2.textContent = "Player 2";
-    player2Name.appendChild(placeholder2);
-
+    // Add saved players to both dropdowns
     players.forEach(function (name) {
-        const option1 = document.createElement("option");
-        option1.value = name;
-        option1.textContent = name;
-        player1Name.appendChild(option1);
-
-        const option2 = document.createElement("option");
-        option2.value = name;
-        option2.textContent = name;
-        player2Name.appendChild(option2);
+        player1Name.add(new Option(name, name));
+        player2Name.add(new Option(name, name));
     });
 
-    player1Name.value = players.includes(currentPlayer1)
-        ? currentPlayer1
-        : "";
-
-    player2Name.value =
-        players.includes(currentPlayer2) &&
-        currentPlayer2 !== player1Name.value
-            ? currentPlayer2
+    // Restore selections only when not resetting
+    if (resetSelection) {
+        player1Name.selectedIndex = 0;
+        player2Name.selectedIndex = 0;
+    } else {
+        player1Name.value = players.includes(currentPlayer1)
+            ? currentPlayer1
             : "";
+
+        player2Name.value =
+            players.includes(currentPlayer2) &&
+            currentPlayer2 !== player1Name.value
+                ? currentPlayer2
+                : "";
+    }
 
     preventSamePlayer();
     updateStartingServerButton();
 }
+
 
 
 function preventSamePlayer() {

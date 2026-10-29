@@ -71,6 +71,7 @@ function savePlayers(players) {
 }
 
 
+
 function updateStartingServerButton() {
     if (!player1Name.value || !player2Name.value) {
         startingServerButton.textContent =
@@ -86,9 +87,6 @@ function updateStartingServerButton() {
         "🏓 " + startingPlayer + " Serves First";
 }
 
-}
-
-
 function updatePlayerDropdowns(resetSelection = false) {
     const players = getPlayers();
 
@@ -103,7 +101,6 @@ function updatePlayerDropdowns(resetSelection = false) {
     player1Name.innerHTML = "";
     player2Name.innerHTML = "";
 
-    // Add a placeholder to both dropdowns.
     const placeholder1 = document.createElement("option");
     placeholder1.value = "";
     placeholder1.textContent = "Select Player";
@@ -114,7 +111,6 @@ function updatePlayerDropdowns(resetSelection = false) {
     placeholder2.textContent = "Select Player";
     player2Name.appendChild(placeholder2);
 
-    // Add saved players to both dropdowns.
     players.forEach(function (name) {
         const option1 = document.createElement("option");
         option1.value = name;
@@ -127,7 +123,6 @@ function updatePlayerDropdowns(resetSelection = false) {
         player2Name.appendChild(option2);
     });
 
-    // Restore selections only when requested and still valid.
     player1Name.value = players.includes(currentPlayer1)
         ? currentPlayer1
         : "";
@@ -140,70 +135,6 @@ function updatePlayerDropdowns(resetSelection = false) {
 
     preventSamePlayer();
     updateStartingServerButton();
-}
-
-
-    players.forEach(function (name) {
-
-        const option1 =
-            document.createElement("option");
-
-        option1.value = name;
-        option1.textContent = name;
-
-        player1Name.appendChild(option1);
-
-
-        const option2 =
-            document.createElement("option");
-
-        option2.value = name;
-        option2.textContent = name;
-
-        player2Name.appendChild(option2);
-
-    });
-
-
-    if (players.includes(currentPlayer1)) {
-
-        player1Name.value = currentPlayer1;
-
-    } else {
-
-        player1Name.value = players[0];
-
-    }
-
-
-    if (
-        players.includes(currentPlayer2) &&
-        currentPlayer2 !== player1Name.value
-    ) {
-
-        player2Name.value = currentPlayer2;
-
-    } else {
-
-        const differentPlayer =
-            players.find(function (name) {
-                return name !== player1Name.value;
-            });
-
-
-        if (differentPlayer) {
-            player2Name.value = differentPlayer;
-        } else {
-            player2Name.value = players[0];
-        }
-
-    }
-
-
-    preventSamePlayer();
-
-    updateStartingServerButton();
-
 }
 
 
@@ -461,9 +392,7 @@ function deleteSelectedPlayer() {
         playerToDelete
     ) {
 
-        player1Name.value =
-            updatedPlayers[0] ||
-            "Player 1";
+        player1Name.value = "";
 
     }
 
@@ -473,10 +402,7 @@ function deleteSelectedPlayer() {
         playerToDelete
     ) {
 
-        player2Name.value =
-            updatedPlayers[1] ||
-            updatedPlayers[0] ||
-            "Player 2";
+        player2Name.value = "";
 
     }
 
@@ -529,21 +455,17 @@ function addPoint(player) {
     }
 
 
-    pointHistory.push({
-
-        score1: score1,
-        score2: score2,
-
-        sets1: sets1,
-        sets2: sets2,
-
-        setNumber: setNumber,
-
-        server: server,
-
-        message: message.textContent
-
-    });
+pointHistory.push({
+    score1: score1,
+    score2: score2,
+    sets1: sets1,
+    sets2: sets2,
+    setNumber: setNumber,
+    server: server,
+    startingServerPlayer: startingServerPlayer,
+    matchFinished: matchFinished,
+    message: message.textContent
+});
 
 
     if (player === 1) {
@@ -799,13 +721,18 @@ document.getElementById("undo")
             setNumber =
                 previous.setNumber;
 
-            server =
-                previous.server;
+            server = previous.server;
+
+            startingServerPlayer =
+                previous.startingServerPlayer;
+
+            matchFinished =
+                previous.matchFinished;
 
             message.textContent =
                 previous.message;
 
-            matchFinished = false;
+            updateStartingServerButton();
 
 
             updateScreen();

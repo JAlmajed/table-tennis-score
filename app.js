@@ -27,11 +27,17 @@ document.addEventListener("DOMContentLoaded", function () {
     const addPlayerButton = document.getElementById("addPlayer");
     const deletePlayerButton = document.getElementById("deletePlayer");
 
+    const PLACEHOLDER1 = "Select Player 1";
+    const PLACEHOLDER2 = "Select Player 2";
+
     function getPlayers() {
         return JSON.parse(
             localStorage.getItem("tableTennisPlayers") || "[]"
         ).filter(function (name) {
-            return name !== "Player 1" && name !== "Player 2";
+            return name !== "Player 1" &&
+                   name !== "Player 2" &&
+                   name !== PLACEHOLDER1 &&
+                   name !== PLACEHOLDER2;
         });
     }
 
@@ -40,7 +46,10 @@ document.addEventListener("DOMContentLoaded", function () {
             "tableTennisPlayers",
             JSON.stringify(
                 players.filter(function (name) {
-                    return name !== "Player 1" && name !== "Player 2";
+                    return name !== "Player 1" &&
+                           name !== "Player 2" &&
+                           name !== PLACEHOLDER1 &&
+                           name !== PLACEHOLDER2;
                 })
             )
         );
@@ -70,22 +79,21 @@ document.addEventListener("DOMContentLoaded", function () {
         player1Name.innerHTML = "";
         player2Name.innerHTML = "";
 
-        // Add saved players only; placeholders are added separately.
+        // Placeholder options
+        const placeholder1 = new Option(PLACEHOLDER1, "");
+        const placeholder2 = new Option(PLACEHOLDER2, "");
+
+        placeholder1.disabled = true;
+        placeholder2.disabled = true;
+
+        player1Name.add(placeholder1);
+        player2Name.add(placeholder2);
+
+        // Add only saved player names
         players.forEach(function (name) {
             player1Name.add(new Option(name, name));
             player2Name.add(new Option(name, name));
         });
-
-        // Put the placeholder labels at the top of each dropdown.
-        player1Name.insertBefore(
-            new Option("Player 1", ""),
-            player1Name.firstChild
-        );
-
-        player2Name.insertBefore(
-            new Option("Player 2", ""),
-            player2Name.firstChild
-        );
 
         if (resetSelection) {
             player1Name.selectedIndex = 0;
@@ -111,13 +119,15 @@ document.addEventListener("DOMContentLoaded", function () {
         const selected2 = player2Name.value;
 
         Array.from(player1Name.options).forEach(function (option) {
-            option.disabled =
-                option.value !== "" && option.value === selected2;
+            if (option.value !== "") {
+                option.disabled = option.value === selected2;
+            }
         });
 
         Array.from(player2Name.options).forEach(function (option) {
-            option.disabled =
-                option.value !== "" && option.value === selected1;
+            if (option.value !== "") {
+                option.disabled = option.value === selected1;
+            }
         });
 
         updateStartingServerButton();
@@ -163,13 +173,18 @@ document.addEventListener("DOMContentLoaded", function () {
     function addPlayer() {
         const name = newPlayerName.value.trim();
 
-        if (name === "") {
+        if (!name) {
             alert("Enter a player name.");
             return;
         }
 
-        if (name === "Player 1" || name === "Player 2") {
-            alert("This name is reserved for the dropdown placeholder.");
+        if (
+            name === "Player 1" ||
+            name === "Player 2" ||
+            name === PLACEHOLDER1 ||
+            name === PLACEHOLDER2
+        ) {
+            alert("That name is reserved for a dropdown placeholder.");
             return;
         }
 
@@ -182,7 +197,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         players.push(name);
         savePlayers(players);
-
         updatePlayerDropdowns();
 
         player1Name.value = name;
@@ -197,18 +211,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         preventSamePlayer();
         updateStartingServerButton();
-
         newPlayerName.value = "";
     }
 
     function deleteSelectedPlayer() {
-        const selected1 = player1Name.value;
-        const selected2 = player2Name.value;
-
         const playerToDelete =
             document.activeElement === player2Name
-                ? selected2
-                : selected1;
+                ? player2Name.value
+                : player1Name.value;
 
         const players = getPlayers();
 
@@ -221,13 +231,13 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const updatedPlayers = players.filter(function (name) {
-            return name !== playerToDelete;
-        });
+        savePlayers(
+            players.filter(function (name) {
+                return name !== playerToDelete;
+            })
+        );
 
-        savePlayers(updatedPlayers);
         updatePlayerDropdowns();
-
         preventSamePlayer();
         updateStartingServerButton();
     }
@@ -249,27 +259,22 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        if (matchFinished) {
-            return;
-        }
+        if (matchFinished) return;
 
         pointHistory.push({
-            score1: score1,
-            score2: score2,
-            sets1: sets1,
-            sets2: sets2,
-            setNumber: setNumber,
-            server: server,
-            startingServerPlayer: startingServerPlayer,
-            matchFinished: matchFinished,
+            score1,
+            score2,
+            sets1,
+            sets2,
+            setNumber,
+            server,
+            startingServerPlayer,
+            matchFinished,
             message: message.textContent
         });
 
-        if (player === 1) {
-            score1++;
-        } else {
-            score2++;
-        }
+        if (player === 1) score1++;
+        else score2++;
 
         updateServer();
         checkSet();
@@ -299,33 +304,22 @@ document.addEventListener("DOMContentLoaded", function () {
     function checkSet() {
         let winner = 0;
 
-        if (score1 >= 11 && score1 - score2 >= 2) {
-            winner = 1;
-        }
+        if (score1 >= 11 && score1 - score2 >= 2) winner = 1;
+        if (score2 >= 11 && score2 - score1 >= 2) winner = 2;
 
-        if (score2 >= 11 && score2 - score1 >= 2) {
-            winner = 2;
-        }
-
-        if (winner === 0) {
-            return;
-        }
+        if (!winner) return;
 
         const winnerName = winner === 1
             ? player1Name.value
             : player2Name.value;
 
-        if (winner === 1) {
-            sets1++;
-        } else {
-            sets2++;
-        }
+        if (winner === 1) sets1++;
+        else sets2++;
 
         message.textContent =
             winnerName + " wins Set " + setNumber + "!";
 
-        const totalSets = Number(bestOf.value);
-        const setsNeeded = Math.ceil(totalSets / 2);
+        const setsNeeded = Math.ceil(Number(bestOf.value) / 2);
 
         if (sets1 >= setsNeeded || sets2 >= setsNeeded) {
             matchFinished = true;
@@ -361,22 +355,18 @@ document.addEventListener("DOMContentLoaded", function () {
         if (server === 1) {
             bulb1.classList.add("active");
             bulb2.classList.remove("active");
-
             serve1.textContent = "SERVING";
             serve2.textContent = "NOT SERVING";
         } else {
             bulb1.classList.remove("active");
             bulb2.classList.add("active");
-
             serve1.textContent = "NOT SERVING";
             serve2.textContent = "SERVING";
         }
     }
 
     document.getElementById("undo").addEventListener("click", function () {
-        if (pointHistory.length === 0) {
-            return;
-        }
+        if (pointHistory.length === 0) return;
 
         const previous = pointHistory.pop();
 
@@ -399,13 +389,8 @@ document.addEventListener("DOMContentLoaded", function () {
         player1Name.value = player2Name.value;
         player2Name.value = tempName;
 
-        const tempScore = score1;
-        score1 = score2;
-        score2 = tempScore;
-
-        const tempSets = sets1;
-        sets1 = sets2;
-        sets2 = tempSets;
+        [score1, score2] = [score2, score1];
+        [sets1, sets2] = [sets2, sets1];
 
         server = server === 1 ? 2 : 1;
         startingServerPlayer = startingServerPlayer === 1 ? 2 : 1;
@@ -432,7 +417,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateScreen();
     });
 
-    // Initial state: show placeholders, not saved player selections.
+    // Initial state
     updatePlayerDropdowns(true);
     updateStartingServerButton();
     updateScreen();

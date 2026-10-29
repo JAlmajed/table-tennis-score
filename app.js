@@ -139,48 +139,22 @@ function updatePlayerDropdowns(resetSelection = false) {
 
 
 function preventSamePlayer() {
-
     const selected1 = player1Name.value;
     const selected2 = player2Name.value;
 
-
-    Array.from(
-        player2Name.options
-    ).forEach(function (option) {
-
+    Array.from(player1Name.options).forEach(function (option) {
         option.disabled =
-            option.value === selected1;
-
-    });
-
-
-    Array.from(
-        player1Name.options
-    ).forEach(function (option) {
-
-        option.disabled =
+            option.value !== "" &&
             option.value === selected2;
-
     });
 
+    Array.from(player2Name.options).forEach(function (option) {
+        option.disabled =
+            option.value !== "" &&
+            option.value === selected1;
+    });
 
-    if (selected1 === selected2) {
-
-        const differentPlayer =
-            getPlayers().find(function (name) {
-                return name !== selected1;
-            });
-
-
-        if (differentPlayer) {
-
-            player2Name.value =
-                differentPlayer;
-
-        }
-
-    }
-
+    updateStartingServerButton();
 }
 
 

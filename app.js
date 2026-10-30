@@ -30,6 +30,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const PLACEHOLDER1 = "Select Player 1";
     const PLACEHOLDER2 = "Select Player 2";
 
+    // Remember which dropdown the user touched last, so "Delete Player"
+    // targets it (the button itself steals focus on most browsers).
+    let lastUsedPlayerSelect = player1Name;
+
+    [player1Name, player2Name].forEach(function (select) {
+        select.addEventListener("focus", function () {
+            lastUsedPlayerSelect = select;
+        });
+        select.addEventListener("change", function () {
+            lastUsedPlayerSelect = select;
+        });
+    });
+
     function getPlayers() {
         return JSON.parse(
             localStorage.getItem("tableTennisPlayers") || "[]"
@@ -164,7 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         startingServerPlayer = startingServerPlayer === 1 ? 2 : 1;
-        server = startingServerPlayer;
+        updateServer();
 
         updateStartingServerButton();
         updateScreen();
@@ -215,10 +228,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function deleteSelectedPlayer() {
-        const playerToDelete =
-            document.activeElement === player2Name
-                ? player2Name.value
-                : player1Name.value;
+        const playerToDelete = lastUsedPlayerSelect.value;
 
         const players = getPlayers();
 
@@ -394,6 +404,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
         server = server === 1 ? 2 : 1;
         startingServerPlayer = startingServerPlayer === 1 ? 2 : 1;
+
+        // Keep undo history in the same orientation as the screen
+        pointHistory = pointHistory.map(function (entry) {
+            return Object.assign({}, entry, {
+                score1: entry.score2,
+                score2: entry.score1,
+                sets1: entry.sets2,
+                sets2: entry.sets1,
+                server: entry.server === 1 ? 2 : 1,
+                startingServerPlayer: entry.startingServerPlayer === 1 ? 2 : 1
+            });
+        });
 
         preventSamePlayer();
         updateStartingServerButton();

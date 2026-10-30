@@ -208,6 +208,7 @@ cursor: pointer;
 
 .app {
     padding: 10px;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 28px);
 }
 
 h1 {
@@ -249,7 +250,7 @@ h1 {
 
 .score {
     font-size: 64px;
-    font-size: clamp(56px, min(20vw, 11dvh), 90px);
+    font-size: clamp(52px, min(20vw, 9.5dvh), 90px);
     margin: 10px 0;
 }
 

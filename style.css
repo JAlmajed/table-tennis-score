@@ -1,351 +1,436 @@
+/* Table Tennis Score
+   The screen is the table: deep table-blue halves with white edge lines.
+   The orange ball is the only warm color, and it sits with whoever serves. */
+
+:root {
+  --night: #071f33;
+  --court: #0d4167;
+  --line: rgba(255, 255, 255, 0.28);
+  --fill: rgba(255, 255, 255, 0.09);
+  --paper: #f3f7fa;
+  --ink: #0a2238;
+  --mute: rgba(243, 247, 250, 0.62);
+  --ball: #ff8a1f;
+  --red: #ff7a7a;
+}
+
 * {
   box-sizing: border-box;
-  }
+}
 
 body {
-margin: 0;
-padding: 0;
-background: #111;
-color: white;
-font-family: Arial, sans-serif;
-min-height: 100vh;
-min-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  background: var(--night);
+  color: var(--paper);
+  font-family: ui-rounded, "SF Pro Rounded", system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+  min-height: 100dvh;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+select,
+input {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--ball);
+  outline-offset: 2px;
 }
 
 .app {
-width: 100%;
-max-width: 1000px;
-margin: auto;
-padding: 20px;
-text-align: center;
+  width: 100%;
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+  text-align: center;
 }
 
 h1 {
-margin: 5px 0 20px;
-font-size: 28px;
+  margin: 5px 0 18px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
+/* Match length */
+
 .settings {
-display: flex;
-justify-content: center;
-align-items: end;
-gap: 15px;
-margin-bottom: 20px;
-flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .settings label {
-display: flex;
-flex-direction: column;
-gap: 6px;
-font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
 }
 
 select {
-padding: 10px;
-border-radius: 8px;
-border: none;
-font-size: 16px;
+  -webkit-appearance: none;
+  appearance: none;
+  padding: 10px 38px 10px 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--fill)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23f3f7fa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    no-repeat right 16px center;
+  color: var(--paper);
+  font-size: 16px;
+  font-weight: 600;
 }
 
-.server-button {
-padding: 11px 18px;
-border: none;
-border-radius: 8px;
-background: #168a45;
-color: white;
-font-size: 16px;
-font-weight: bold;
-cursor: pointer;
-min-height: 43px;
+option {
+  color: var(--ink);
 }
+
+/* Players: one half of the table each */
 
 .players {
-display: flex;
-gap: 20px;
+  display: flex;
+  gap: 20px;
 }
 
 .player-card {
-flex: 1;
-background: #1d1d1d;
-border-radius: 18px;
-padding: 20px;
-box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+  flex: 1;
+  min-width: 0;
+  padding: 20px;
+  border-radius: 24px;
+  background: var(--court);
+  box-shadow: inset 0 0 0 2px var(--line);
+  transition: box-shadow 0.25s;
+}
+
+.player-card:has(.bulb.active) {
+  box-shadow: inset 0 0 0 2px var(--ball);
 }
 
 .player-name {
-width: 100%;
-padding: 12px;
-border-radius: 10px;
-border: none;
-text-align: center;
-font-size: 20px;
-font-weight: bold;
-background: #333;
-color: white;
+  width: 100%;
+  padding: 12px 34px 12px 14px;
+  border: none;
+  background-color: var(--fill);
+  background-position: right 14px center;
+  text-align: center;
+  text-align-last: center;
+  font-size: 20px;
+  font-weight: 700;
 }
 
 .score {
-font-size: 110px;
-font-weight: bold;
-line-height: 1;
-margin: 20px 0;
+  margin: 20px 0 14px;
+  font-size: 110px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
 }
 
+/* Serve: the ball moves to the server */
+
 .serve {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-gap: 8px;
-min-height: 55px;
-font-size: 13px;
-font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 55px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mute);
+}
+
+.serve span {
+  text-transform: lowercase;
+}
+
+.serve span::first-letter {
+  text-transform: uppercase;
+}
+
+.player-card:has(.bulb.active) .serve {
+  color: var(--paper);
 }
 
 .bulb {
-width: 20px;
-height: 20px;
-border-radius: 50%;
-background: #444;
-border: 2px solid #666;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px dashed rgba(255, 255, 255, 0.35);
+  background: transparent;
+  transition: background 0.2s, box-shadow 0.2s;
 }
 
 .bulb.active {
-background: #ffd400;
-border-color: #fff000;
-box-shadow:
-0 0 8px #ffd400,
-0 0 20px #ffd400;
+  border: 2px solid #ffb066;
+  background: var(--ball);
+  box-shadow: 0 0 0 6px rgba(255, 138, 31, 0.22);
 }
 
 .point-button {
-width: 100%;
-margin-top: 15px;
-padding: 20px;
-border: none;
-border-radius: 14px;
-background: #1677ff;
-color: white;
-font-size: 24px;
-font-weight: bold;
-cursor: pointer;
-touch-action: manipulation;
+  width: 100%;
+  margin-top: 14px;
+  padding: 18px;
+  border: none;
+  border-radius: 16px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 22px;
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.08s;
 }
 
 .point-button:active {
-transform: scale(0.97);
+  transform: scale(0.97);
 }
 
-.player-management {
-text-align: center;
-margin: 15px 0;
+/* Controls */
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 18px;
 }
 
-.player-management input,
-.player-management button {
-margin: 5px;
-padding: 8px 12px;
-border-radius: 10px;
-font-size: 14px;
+.controls button {
+  padding: 12px 20px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--fill);
+  color: var(--paper);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-
-#addPlayer {
-background: #168a45;
-color: white;
+.controls button:active {
+  background: rgba(255, 255, 255, 0.18);
 }
 
-#deletePlayer {
-background: #b52b2b;
-color: white;
+.controls .server-button {
+  min-height: 43px;
+  border-color: var(--ball);
+  background: transparent;
+  color: var(--ball);
 }
+
+/* Set score */
 
 .match {
-margin: 25px 0;
+  margin: 25px 0;
 }
 
 .set-number {
-font-size: 18px;
-font-weight: bold;
-text-align: center;
-
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--mute);
+  text-align: center;
 }
 
 .sets {
-font-size: 42px;
-font-weight: bold;
-margin-top: 5px;
-text-align: center;
+  margin-top: 4px;
+  font-size: 44px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
 }
 
 #message {
-min-height: 28px;
-margin-top: 10px;
-font-size: 18px;
-font-weight: bold;
-text-align: center;
+  min-height: 28px;
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ball);
+  text-align: center;
 }
 
-.controls {
-display: flex;
-justify-content: center;
-gap: 10px;
-flex-wrap: wrap;
-}
-
-.controls button {
-padding: 13px 18px;
-border: none;
-border-radius: 10px;
-font-size: 16px;
-font-weight: bold;
-cursor: pointer;
-}
-
-@media (max-width: 600px) {
-
-
-.app {
-    padding: 10px;
-    padding-top: calc(env(safe-area-inset-top, 0px) + 28px);
-}
-
-h1 {
-    font-size: 20px;
-    margin: 2px 0 10px;
-}
-
-.settings {
-    margin-bottom: 10px;
-}
-
-.match {
-    margin: 10px 0 2px;
-}
-
-.sets {
-    font-size: 34px;
-}
-
-#message {
-    min-height: 22px;
-    margin-top: 6px;
-    font-size: 16px;
-}
-
-.players {
-    gap: 8px;
-}
-
-.player-card {
-    padding: 10px;
-    border-radius: 12px;
-}
-
-.player-name {
-    font-size: 16px;
-    padding: 10px 5px;
-}
-
-.score {
-    font-size: 64px;
-    font-size: clamp(52px, min(20vw, 9.5dvh), 90px);
-    margin: 10px 0;
-}
-
-.point-button {
-    padding: 14px 5px;
-    font-size: 19px;
-}
-
-.serve {
-    font-size: 11px;
-    min-height: 44px;
-}
-
-.bulb {
-    width: 18px;
-    height: 18px;
-}
+/* Player list */
 
 .player-management {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 15px 0;
 }
 
 .player-management input,
 .player-management button {
-    margin: 0;
+  padding: 11px 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--fill);
+  color: var(--paper);
+  font-size: 15px;
 }
 
-.player-management input {
-    flex: 1 1 100%;
-    min-width: 0;
+.player-management input::placeholder {
+  color: var(--mute);
 }
 
 .player-management button {
-    flex: 1 1 0;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.server-button {
-    width: 100%;
+#deletePlayer {
+  border-color: rgba(255, 122, 122, 0.5);
+  background: transparent;
+  color: var(--red);
 }
 
-.controls {
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+
+/* Phones */
+
+@media (max-width: 600px) {
+  .app {
+    padding: 10px;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 28px);
+  }
+
+  h1 {
+    font-size: 19px;
+    margin: 2px 0 10px;
+  }
+
+  .settings {
+    margin-bottom: 10px;
+  }
+
+  .players {
+    gap: 8px;
+  }
+
+  .player-card {
+    padding: 10px;
+    border-radius: 18px;
+  }
+
+  .player-name {
+    font-size: 16px;
+    padding: 10px 24px 10px 8px;
+    background-position: right 9px center;
+  }
+
+  .score {
+    font-size: 64px;
+    font-size: clamp(50px, min(20vw, 8.5dvh), 90px);
+    margin: 10px 0;
+  }
+
+  .point-button {
+    padding: 14px 5px;
+    font-size: 19px;
+  }
+
+  .serve {
+    font-size: 12px;
+    min-height: 44px;
+  }
+
+  .bulb {
+    width: 18px;
+    height: 18px;
+  }
+
+  .controls {
     gap: 8px;
     margin-top: 10px;
-}
+  }
 
-.controls button {
+  .controls button {
     font-size: 14px;
+    padding: 10px 14px;
+  }
+
+  .controls .server-button {
+    width: 100%;
+  }
+
+  .match {
+    margin: 10px 0 2px;
+  }
+
+  .sets {
+    font-size: 30px;
+  }
+
+  #message {
+    min-height: 18px;
+    margin-top: 4px;
+    font-size: 16px;
+  }
+
+  .player-management {
+    gap: 8px;
+    margin: 10px 0;
+  }
+
+  .player-management input {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .player-management button {
+    flex: 1 1 0;
     padding: 10px 12px;
+  }
 }
 
-
-}
+/* Phone on its side */
 
 @media (orientation: landscape) and (max-height: 600px) {
-
-
-.app {
+  .app {
     padding: 8px;
-}
+  }
 
-h1 {
+  h1 {
     display: none;
-}
+  }
 
-.settings {
+  .settings {
     margin-bottom: 8px;
-}
+  }
 
-.player-card {
+  .player-card {
     padding: 10px;
-}
+  }
 
-.score {
+  .score {
     font-size: 70px;
     margin: 8px 0;
-}
+  }
 
-.point-button {
+  .point-button {
     padding: 12px;
-}
+  }
 
-.match {
+  .match {
     margin: 10px 0;
-}
+  }
 
-.player-management {
+  .player-management {
     margin: 8px 0;
-}
+  }
 
-.player-name option[value=""] {
+  .player-name option[value=""] {
     display: none;
-}
-
-
+  }
 }

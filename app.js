@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateStartingServerButton() {
         if (!player1Name.value || !player2Name.value) {
             startingServerButton.textContent =
-                "🏓 Select Both Players First";
+                "Select both players first";
             return;
         }
 
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
             : player2Name.value;
 
         startingServerButton.textContent =
-            "🏓 " + startingPlayer + " Serves First";
+            startingPlayer + " serves first";
     }
 
     function updatePlayerDropdowns(resetSelection = false) {

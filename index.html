@@ -12,6 +12,8 @@
 <title>Table Tennis Score</title>
 
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111111">
     
 <link rel="stylesheet" href="style.css">
 
@@ -141,6 +143,14 @@
 </div>
 
 <script src="app.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+        navigator.serviceWorker.register("sw.js").catch(function () {});
+    });
+}
+</script>
 
 </body>
 </html>

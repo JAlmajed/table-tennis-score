@@ -51,6 +51,11 @@ document.addEventListener("DOMContentLoaded", function () {
                    name !== "Player 2" &&
                    name !== PLACEHOLDER1 &&
                    name !== PLACEHOLDER2;
+        }).sort(function (a, b) {
+            return a.localeCompare(b, undefined, {
+                sensitivity: "base",
+                numeric: true
+            });
         });
     }
 

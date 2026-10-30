@@ -9,6 +9,7 @@ background: #111;
 color: white;
 font-family: Arial, sans-serif;
 min-height: 100vh;
+min-height: 100dvh;
 }
 
 .app {
@@ -210,7 +211,26 @@ cursor: pointer;
 }
 
 h1 {
-    font-size: 22px;
+    font-size: 20px;
+    margin: 2px 0 10px;
+}
+
+.settings {
+    margin-bottom: 10px;
+}
+
+.match {
+    margin: 10px 0 2px;
+}
+
+.sets {
+    font-size: 34px;
+}
+
+#message {
+    min-height: 22px;
+    margin-top: 6px;
+    font-size: 16px;
 }
 
 .players {
@@ -228,17 +248,19 @@ h1 {
 }
 
 .score {
-    font-size: 75px;
-    margin: 15px 0;
+    font-size: 64px;
+    font-size: clamp(56px, min(20vw, 11dvh), 90px);
+    margin: 10px 0;
 }
 
 .point-button {
-    padding: 16px 5px;
+    padding: 14px 5px;
     font-size: 19px;
 }
 
 .serve {
     font-size: 11px;
+    min-height: 44px;
 }
 
 .bulb {
@@ -247,21 +269,38 @@ h1 {
 }
 
 .player-management {
-    flex-direction: column;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 10px 0;
 }
 
 .player-management input,
 .player-management button {
-    width: 100%;
+    margin: 0;
+}
+
+.player-management input {
+    flex: 1 1 100%;
+    min-width: 0;
+}
+
+.player-management button {
+    flex: 1 1 0;
 }
 
 .server-button {
     width: 100%;
 }
 
+.controls {
+    gap: 8px;
+    margin-top: 10px;
+}
+
 .controls button {
     font-size: 14px;
-    padding: 11px;
+    padding: 10px 12px;
 }
 
 

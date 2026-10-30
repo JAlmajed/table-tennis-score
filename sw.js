@@ -1,5 +1,5 @@
 // Bump this number whenever you want every device to drop its old cache.
-const CACHE_NAME = "table-tennis-score-v3";
+const CACHE_NAME = "table-tennis-score-v4";
 
 const FILES_TO_CACHE = [
     "./",
@@ -51,7 +51,7 @@ self.addEventListener("fetch", function (event) {
     }
 
     event.respondWith(
-        fetch(request)
+        fetch(request, { cache: "no-cache" })
             .then(function (response) {
                 if (response && response.ok) {
                     const copy = response.clone();

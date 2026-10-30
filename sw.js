@@ -1,5 +1,5 @@
 // Bump this number whenever you want every device to drop its old cache.
-const CACHE_NAME = "table-tennis-score-v2";
+const CACHE_NAME = "table-tennis-score-v3";
 
 const FILES_TO_CACHE = [
     "./",
@@ -7,7 +7,9 @@ const FILES_TO_CACHE = [
     "./style.css",
     "./app.js",
     "./manifest.json",
-    "./apple-touch-icon.png"
+    "./apple-touch-icon.png",
+    "./favicon.ico",
+    "./favicon-32.png"
 ];
 
 self.addEventListener("install", function (event) {

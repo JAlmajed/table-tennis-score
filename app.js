@@ -260,12 +260,14 @@ document.addEventListener("DOMContentLoaded", function () {
     addPlayerButton.addEventListener("click", addPlayer);
     deletePlayerButton.addEventListener("click", deleteSelectedPlayer);
 
-    document.getElementById("point1").addEventListener("click", function () {
-        addPoint(1);
-    });
-
-    document.getElementById("point2").addEventListener("click", function () {
-        addPoint(2);
+    // Tap anywhere on a player's card to count a point for them.
+    // The name dropdown is left alone so choosing a player does not score.
+    // (The + Point button sits inside the card, so it is covered too.)
+    document.querySelectorAll(".player-card").forEach(function (card, index) {
+        card.addEventListener("click", function (event) {
+            if (event.target.closest("select")) return;
+            addPoint(index + 1);
+        });
     });
 
     function addPoint(player) {

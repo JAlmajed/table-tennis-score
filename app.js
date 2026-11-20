@@ -441,7 +441,7 @@ document.addEventListener("DOMContentLoaded", function () {
         matchFinished = false;
         message.textContent = "";
 
-        updatePlayerDropdowns(true);
+        // Players stay selected; only the score and sets start over.
         updateStartingServerButton();
         updateScreen();
     });

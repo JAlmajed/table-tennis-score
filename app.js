@@ -430,6 +430,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.getElementById("newMatch").addEventListener("click", function () {
+        // If the match was finished, the winner stays and the loser's slot is
+        // cleared so the next opponent can be picked. Mid-match, both stay.
+        const loserSelect = matchFinished
+            ? (sets1 > sets2 ? player2Name : player1Name)
+            : null;
+
         score1 = 0;
         score2 = 0;
         sets1 = 0;
@@ -441,7 +447,11 @@ document.addEventListener("DOMContentLoaded", function () {
         matchFinished = false;
         message.textContent = "";
 
-        // Players stay selected; only the score and sets start over.
+        if (loserSelect) {
+            loserSelect.selectedIndex = 0;
+            preventSamePlayer();
+        }
+
         updateStartingServerButton();
         updateScreen();
     });
